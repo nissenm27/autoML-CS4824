@@ -1,0 +1,6 @@
+dataset,task_type,model,best_cv_score,test_score,runtime_sec,best_params
+iris,classification,gradient_boosting,0.9642,0.9474,0.81,"{'model__learning_rate': 0.01, 'model__max_depth': 2, 'model__n_estimators': 150}"
+iris,classification,random_forest,0.9552,0.9211,0.49,"{'model__max_depth': None, 'model__n_estimators': 50}"
+iris,classification,decision_tree,0.9286,0.8947,0.08,"{'model__max_depth': None, 'model__min_samples_split': 2}"
+iris,classification,neural_net,0.9462,0.8947,0.22,"{'model__hidden_layer_sizes': (32,), 'model__learning_rate_init': 0.001}"
+iris,classification,logistic_regression,0.9642,0.8421,1.51,"{'model__C': 10, 'model__solver': 'liblinear'}"
