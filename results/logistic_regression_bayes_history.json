@@ -1,97 +1,97 @@
 [
   {
     "iteration": 1,
-    "value": 0.5410509031198686,
+    "value": 0.9110953058321479,
     "params": {
-      "model__C": 1.0666353677914382,
+      "model__C": 0.14045462299176917,
       "model__solver": "lbfgs"
     }
   },
   {
     "iteration": 2,
-    "value": 0.5416666666666666,
+    "value": 0.9461830251303937,
     "params": {
-      "model__C": 0.14861320482123208,
+      "model__C": 4.678527401696364,
       "model__solver": "lbfgs"
     }
   },
   {
     "iteration": 3,
-    "value": 0.5394088669950738,
+    "value": 0.8385490753911807,
     "params": {
-      "model__C": 0.6062644492719651,
+      "model__C": 0.04784575943007312,
       "model__solver": "liblinear"
     }
   },
   {
     "iteration": 4,
-    "value": 0.5297619047619048,
+    "value": 0.8302513039355145,
     "params": {
-      "model__C": 0.0025465278238291046,
+      "model__C": 0.011575166243570228,
       "model__solver": "lbfgs"
     }
   },
   {
     "iteration": 5,
-    "value": 0.5355090311986864,
+    "value": 0.9551920341394026,
     "params": {
-      "model__C": 0.004290850844945151,
+      "model__C": 1.1543522456272166,
       "model__solver": "lbfgs"
     }
   },
   {
     "iteration": 6,
-    "value": 0.5342775041050903,
+    "value": 0.9461830251303937,
     "params": {
-      "model__C": 0.007629324700537859,
-      "model__solver": "liblinear"
-    }
-  },
-  {
-    "iteration": 7,
-    "value": 0.5336617405582923,
-    "params": {
-      "model__C": 0.0043255904830162804,
-      "model__solver": "liblinear"
-    }
-  },
-  {
-    "iteration": 8,
-    "value": 0.5420771756978654,
-    "params": {
-      "model__C": 6.978871552928104,
+      "model__C": 2.4819748886705075,
       "model__solver": "lbfgs"
     }
   },
   {
-    "iteration": 9,
-    "value": 0.5420771756978654,
+    "iteration": 7,
+    "value": 0.8302513039355145,
     "params": {
-      "model__C": 4.583204290933111,
+      "model__C": 0.018840344709245352,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 8,
+    "value": 0.8205310573731627,
+    "params": {
+      "model__C": 0.0056622395255432586,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 9,
+    "value": 0.9461830251303937,
+    "params": {
+      "model__C": 9.713302721449134,
       "model__solver": "lbfgs"
     }
   },
   {
     "iteration": 10,
-    "value": 0.5383825944170771,
+    "value": 0.8205310573731627,
     "params": {
-      "model__C": 2.244462504135644,
+      "model__C": 0.006068796479812891,
       "model__solver": "liblinear"
     }
   },
   {
     "iteration": 11,
-    "value": 0.5420771756978653,
+    "value": 0.8748221906116642,
     "params": {
-      "model__C": 0.0399242582777815,
-      "model__solver": "lbfgs"
+      "model__C": 0.5587345244563262,
+      "model__solver": "liblinear"
     }
   },
   {
     "iteration": 12,
-    "value": 0.541871921182266,
+    "value": 0.9551920341394026,
     "params": {
-      "model__C": 7.559672699256418,
+      "model__C": 1.066075866982243,
       "model__solver": "lbfgs"
     }
   }

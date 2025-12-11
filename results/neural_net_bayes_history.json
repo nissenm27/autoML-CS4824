@@ -1,124 +1,127 @@
 [
   {
     "iteration": 1,
-    "value": 0.5667077175697864,
+    "value": 0.8745851114272166,
     "params": {
       "model__hidden_layer_sizes": [
         64
       ],
-      "model__learning_rate_init": 0.0002496587001752275
+      "model__learning_rate_init": 0.00012049933572781585
     }
   },
   {
     "iteration": 2,
-    "value": 0.560344827586207,
+    "value": 0.9108582266477003,
     "params": {
       "model__hidden_layer_sizes": [
-        128
+        64,
+        32
       ],
-      "model__learning_rate_init": 0.0007054333271000805
+      "model__learning_rate_init": 0.028462486251048767
     }
   },
   {
     "iteration": 3,
-    "value": 0.5626026272577996,
+    "value": 0.9281650071123755,
     "params": {
       "model__hidden_layer_sizes": [
-        64
+        64,
+        32
       ],
-      "model__learning_rate_init": 0.00013615476356255486
+      "model__learning_rate_init": 0.0035395498603240667
     }
   },
   {
     "iteration": 4,
-    "value": 0.5697865353037767,
+    "value": 0.9196301564722617,
     "params": {
       "model__hidden_layer_sizes": [
+        64,
         32
       ],
-      "model__learning_rate_init": 0.0006317497929104961
+      "model__learning_rate_init": 0.011356287748206887
     }
   },
   {
     "iteration": 5,
-    "value": 0.5667077175697864,
+    "value": 0.9461830251303937,
     "params": {
       "model__hidden_layer_sizes": [
-        128
+        32
       ],
-      "model__learning_rate_init": 0.00031663169752676996
+      "model__learning_rate_init": 0.0009017265182160602
     }
   },
   {
     "iteration": 6,
-    "value": 0.5617816091954023,
+    "value": 0.9461830251303937,
     "params": {
       "model__hidden_layer_sizes": [
-        64
+        128
       ],
-      "model__learning_rate_init": 0.00046766756243817303
+      "model__learning_rate_init": 0.0003016964256032521
     }
   },
   {
     "iteration": 7,
-    "value": 0.5636288998357964,
+    "value": 0.9108582266477003,
     "params": {
       "model__hidden_layer_sizes": [
-        64
+        64,
+        32
       ],
-      "model__learning_rate_init": 0.0008071477352268435
+      "model__learning_rate_init": 0.03456375124543581
     }
   },
   {
     "iteration": 8,
-    "value": 0.5589080459770114,
+    "value": 0.9461830251303937,
     "params": {
       "model__hidden_layer_sizes": [
         32
       ],
-      "model__learning_rate_init": 0.00032101784056740555
+      "model__learning_rate_init": 0.004671036962909501
     }
   },
   {
     "iteration": 9,
-    "value": 0.5630131362889984,
+    "value": 0.9374110953058321,
     "params": {
       "model__hidden_layer_sizes": [
         64,
         32
       ],
-      "model__learning_rate_init": 0.000191941139490362
+      "model__learning_rate_init": 0.002140241214003754
     }
   },
   {
     "iteration": 10,
-    "value": 0.5400246305418719,
+    "value": 0.9284020862968232,
     "params": {
       "model__hidden_layer_sizes": [
-        64,
-        32
+        128
       ],
-      "model__learning_rate_init": 0.012394637101494474
+      "model__learning_rate_init": 0.016432341055396607
     }
   },
   {
     "iteration": 11,
-    "value": 0.5517241379310346,
+    "value": 0.9461830251303937,
     "params": {
       "model__hidden_layer_sizes": [
         32
       ],
-      "model__learning_rate_init": 0.0678072713147652
+      "model__learning_rate_init": 0.0008909859435545934
     }
   },
   {
     "iteration": 12,
-    "value": 0.5626026272577996,
+    "value": 0.9551920341394026,
     "params": {
       "model__hidden_layer_sizes": [
-        32
+        128
       ],
-      "model__learning_rate_init": 0.0020373278806492907
+      "model__learning_rate_init": 0.00029833007709477205
     }
   }
 ]

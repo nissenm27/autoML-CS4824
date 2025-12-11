@@ -55,27 +55,27 @@
       "mean_corr": 0.6923617904613262
     },
     "logistic_regression": {
-      "model__C": 0.45408777250937715,
+      "model__C": 1.1543522456272166,
       "model__solver": "lbfgs"
     },
     "decision_tree": {
-      "model__max_depth": 17,
-      "model__min_samples_split": 4
+      "model__max_depth": 2,
+      "model__min_samples_split": 8
     },
     "random_forest": {
-      "model__n_estimators": 188,
-      "model__max_depth": 20
+      "model__n_estimators": 52,
+      "model__max_depth": 9
     },
     "gradient_boosting": {
-      "model__n_estimators": 135,
-      "model__learning_rate": 0.26315227505371386,
+      "model__n_estimators": 236,
+      "model__learning_rate": 0.004754869730691808,
       "model__max_depth": 2
     },
     "neural_net": {
       "model__hidden_layer_sizes": [
-        64
+        128
       ],
-      "model__learning_rate_init": 0.0005074123876469836
+      "model__learning_rate_init": 0.00029833007709477205
     },
     "tiny_nas": {
       "hidden_layer_sizes": [
