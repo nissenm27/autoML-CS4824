@@ -1,0 +1,131 @@
+{
+  "adult_income": {
+    "logistic_regression": {
+      "model__C": 0.5338390769475546,
+      "model__solver": "lbfgs"
+    },
+    "decision_tree": {
+      "model__max_depth": 7,
+      "model__min_samples_split": 5
+    },
+    "random_forest": {
+      "model__n_estimators": 130,
+      "model__max_depth": 16
+    },
+    "gradient_boosting": {
+      "model__n_estimators": 266,
+      "model__learning_rate": 0.05686703188192773,
+      "model__max_depth": 6
+    },
+    "neural_net": {
+      "model__hidden_layer_sizes": [
+        32
+      ],
+      "model__learning_rate_init": 0.0686956971492221
+    },
+    "tiny_nas": {
+      "hidden_layer_sizes": [
+        32
+      ],
+      "activation": "tanh",
+      "learning_rate_init": 0.001
+    },
+    "meta_features": {
+      "n_samples": 48842,
+      "n_features": 14,
+      "n_numeric": 6,
+      "n_categorical": 8,
+      "n_classes": 2,
+      "class_imbalance": 3.179173440574998,
+      "class_entropy": 0.5502506190603338,
+      "missing_ratio": 0.009454684785342825,
+      "mean_corr": 0.2161957860766296
+    }
+  },
+  "iris": {
+    "meta_features": {
+      "n_samples": 150,
+      "n_features": 4,
+      "n_numeric": 4,
+      "n_categorical": 0,
+      "n_classes": 3,
+      "class_imbalance": 1.0,
+      "class_entropy": 1.0986122886681096,
+      "missing_ratio": 0.0,
+      "mean_corr": 0.6923617904613262
+    },
+    "logistic_regression": {
+      "model__C": 0.45408777250937715,
+      "model__solver": "lbfgs"
+    },
+    "decision_tree": {
+      "model__max_depth": 17,
+      "model__min_samples_split": 4
+    },
+    "random_forest": {
+      "model__n_estimators": 188,
+      "model__max_depth": 20
+    },
+    "gradient_boosting": {
+      "model__n_estimators": 135,
+      "model__learning_rate": 0.26315227505371386,
+      "model__max_depth": 2
+    },
+    "neural_net": {
+      "model__hidden_layer_sizes": [
+        64
+      ],
+      "model__learning_rate_init": 0.0005074123876469836
+    },
+    "tiny_nas": {
+      "hidden_layer_sizes": [
+        32
+      ],
+      "activation": "tanh",
+      "learning_rate_init": 0.001
+    }
+  },
+  "wine_quality": {
+    "meta_features": {
+      "n_samples": 6497,
+      "n_features": 11,
+      "n_numeric": 11,
+      "n_categorical": 0,
+      "n_classes": 7,
+      "class_imbalance": 567.2,
+      "class_entropy": 1.273730028021701,
+      "missing_ratio": 0.0,
+      "mean_corr": 0.31344458668883557
+    },
+    "logistic_regression": {
+      "model__C": 6.978871552928104,
+      "model__solver": "lbfgs"
+    },
+    "decision_tree": {
+      "model__max_depth": 18,
+      "model__min_samples_split": 2
+    },
+    "random_forest": {
+      "model__n_estimators": 79,
+      "model__max_depth": 20
+    },
+    "gradient_boosting": {
+      "model__n_estimators": 140,
+      "model__learning_rate": 0.05699437546014303,
+      "model__max_depth": 8
+    },
+    "neural_net": {
+      "model__hidden_layer_sizes": [
+        32
+      ],
+      "model__learning_rate_init": 0.0006317497929104961
+    },
+    "tiny_nas": {
+      "hidden_layer_sizes": [
+        32
+      ],
+      "activation": "tanh",
+      "learning_rate_init": 0.001
+    }
+  }
+}

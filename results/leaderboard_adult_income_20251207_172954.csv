@@ -1,0 +1,6 @@
+dataset,task_type,model,best_cv_score,test_score,runtime_sec,best_params
+adult_income,classification,gradient_boosting,0.8712,0.8751,354.2,"{'model__n_estimators': 292, 'model__learning_rate': 0.03872257614624262, 'model__max_depth': 7}"
+adult_income,classification,random_forest,0.8618,0.8649,19.84,"{'model__n_estimators': 151, 'model__max_depth': 17}"
+adult_income,classification,decision_tree,0.8568,0.8594,7.3,"{'model__max_depth': 8, 'model__min_samples_split': 2}"
+adult_income,classification,neural_net,0.8535,0.8592,394.93,"{'model__hidden_layer_sizes': (32,), 'model__learning_rate_init': 0.00019496922843136686}"
+adult_income,classification,logistic_regression,0.8514,0.8519,5.11,"{'model__C': 0.9729594188908965, 'model__solver': 'lbfgs'}"

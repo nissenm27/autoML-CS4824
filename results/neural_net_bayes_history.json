@@ -1,0 +1,124 @@
+[
+  {
+    "iteration": 1,
+    "value": 0.5667077175697864,
+    "params": {
+      "model__hidden_layer_sizes": [
+        64
+      ],
+      "model__learning_rate_init": 0.0002496587001752275
+    }
+  },
+  {
+    "iteration": 2,
+    "value": 0.560344827586207,
+    "params": {
+      "model__hidden_layer_sizes": [
+        128
+      ],
+      "model__learning_rate_init": 0.0007054333271000805
+    }
+  },
+  {
+    "iteration": 3,
+    "value": 0.5626026272577996,
+    "params": {
+      "model__hidden_layer_sizes": [
+        64
+      ],
+      "model__learning_rate_init": 0.00013615476356255486
+    }
+  },
+  {
+    "iteration": 4,
+    "value": 0.5697865353037767,
+    "params": {
+      "model__hidden_layer_sizes": [
+        32
+      ],
+      "model__learning_rate_init": 0.0006317497929104961
+    }
+  },
+  {
+    "iteration": 5,
+    "value": 0.5667077175697864,
+    "params": {
+      "model__hidden_layer_sizes": [
+        128
+      ],
+      "model__learning_rate_init": 0.00031663169752676996
+    }
+  },
+  {
+    "iteration": 6,
+    "value": 0.5617816091954023,
+    "params": {
+      "model__hidden_layer_sizes": [
+        64
+      ],
+      "model__learning_rate_init": 0.00046766756243817303
+    }
+  },
+  {
+    "iteration": 7,
+    "value": 0.5636288998357964,
+    "params": {
+      "model__hidden_layer_sizes": [
+        64
+      ],
+      "model__learning_rate_init": 0.0008071477352268435
+    }
+  },
+  {
+    "iteration": 8,
+    "value": 0.5589080459770114,
+    "params": {
+      "model__hidden_layer_sizes": [
+        32
+      ],
+      "model__learning_rate_init": 0.00032101784056740555
+    }
+  },
+  {
+    "iteration": 9,
+    "value": 0.5630131362889984,
+    "params": {
+      "model__hidden_layer_sizes": [
+        64,
+        32
+      ],
+      "model__learning_rate_init": 0.000191941139490362
+    }
+  },
+  {
+    "iteration": 10,
+    "value": 0.5400246305418719,
+    "params": {
+      "model__hidden_layer_sizes": [
+        64,
+        32
+      ],
+      "model__learning_rate_init": 0.012394637101494474
+    }
+  },
+  {
+    "iteration": 11,
+    "value": 0.5517241379310346,
+    "params": {
+      "model__hidden_layer_sizes": [
+        32
+      ],
+      "model__learning_rate_init": 0.0678072713147652
+    }
+  },
+  {
+    "iteration": 12,
+    "value": 0.5626026272577996,
+    "params": {
+      "model__hidden_layer_sizes": [
+        32
+      ],
+      "model__learning_rate_init": 0.0020373278806492907
+    }
+  }
+]

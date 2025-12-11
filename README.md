@@ -1,134 +1,197 @@
-# AutoML-CS4824: Lightweight AutoML Framework
-**Course:** CS4824 — Machine Learning Capstone  
+# Lightweight AutoML for Efficient and Transparent Model Selection
 **Author:** Matthew Nissen  
-**Project:** Building a resource-conscious AutoML framework inspired by Auto-sklearn and Google AutoML  
-**Status:** Week 2 — Preprocessing Module Implementation  
+**Course:** CS 4824 — Machine Learning  
+**Instructor:** Prof. Ming Jin  
+
+This repository contains the full implementation of a lightweight, transparent AutoML framework designed for low-compute environments. The system automates:
+
+- Data preprocessing (schema inference, imputation, scaling, encoding)
+- Model selection across a curated model zoo
+- Hyperparameter optimization (Grid Search, Random Search, Bayesian Optimization)
+- Ensemble construction (soft voting + stacking)
+- Meta-learning warm starts
+- Lightweight neural architecture search (TinyNAS)
+
+The framework is optimized for laptop-scale execution while maintaining transparency and interpretability.
 
 ---
 
-## Project Overview
-This project aims to design and implement a lightweight AutoML system that automates the essential stages of the machine learning pipeline — **data preprocessing, model selection, and hyperparameter tuning** — while remaining transparent and computationally efficient.  
-The framework will incrementally expand toward more advanced AutoML capabilities such as **Bayesian optimization, ensemble construction, and meta-learning**.
+## **Getting Started**
 
----
+### **1. Install Dependencies**
+You can install all required libraries using:
 
-## Week 2: Progress Summary — Preprocessing Module Implementation
+```bash
+pip install -r requirements.txt
+```
 
-### Datasets
-- Downloaded datasets via **OpenML API**:
-  - `iris.csv`
-  - `wine_quality.csv`
-  - `adult_income.csv`
-- Stored locally under `/data/` for consistent offline access and reproducibility.
+### **2. Repository Structure:**
 
-### Schema Inference
-- Implemented `infer_schema(df)` in `preprocessing/schema.py`:
-  - Automatically detects numeric vs. categorical features.
-  - Generates missingness summaries.
-  - Returns structured metadata as a `Schema` dataclass instance.
+```markdown
+autoML-CS4824/
+│
+├── preprocessing/
+│   ├── schema.py
+│   ├── build_preprocessor.py
+│   ├── validate_preprocessing.py
+│
+├── models/
+│   ├── base_models.py
+│   ├── linear_models.py
+│   ├── tree_models.py
+│   ├── neural_net.py
+│   ├── validate_models.py
+│
+├── search/
+│   ├── grid_random.py
+│   ├── bayesian.py
+│   ├── search_utils.py
+│   ├── validate_search.py
+│
+├── ensembles/
+│   ├── __init__.py
+│   ├── soft_voting.py
+│   ├── stacking.py
+│
+├── meta/
+│   ├── meta_features.py
+│   ├── meta_knn.py
+│   ├── meta_dataset.json
+│
+├── nas/
+│   ├── tiny_nas.py
+│
+├── results/
+│   ├── model_zoo_summary.csv
+│   ├── leaderboard_*.csv
+│   ├── *_*_history.json
+│   ├── model_zoo_bubble_plot.png
+│
+├── data/
+│   ├── iris.csv
+│   ├── wine_quality.csv
+│   ├── adult_income.csv
+│   ├── inspect_datasets.py
+│   ├── load_datasets.py
+│
+├── notebooks/
+│   ├── example_run.ipynb
+│
+├── reports/
+│   ├── annotated-Project-Milestones.pdf
+│   ├── AutoML_presentation.pdf
+│   ├── Milestone Report 2.pdf
+│   ├── CS4824_Final_Capstone_Report.pdf
+│   ├── CS4824_Final_Capstone_Report.Rmd
+│   ├── AutoML.docx
+|
+├── checkpoints/
+│   ├── best_model_adult.pkl
+│   ├── best_model_iris.pkl
+│   ├── best_model_wine.pkl
+|
+├── analysis/
+│   ├── build_meta_table.py
+│   ├── model_zoo_plot.py
+│   ├── plot_dataset_landscape.py
+│   ├── plot_search_trajectories.py
+│   ├── slide4_ensemble_and_warmstart.py
+│   ├── dataset_landscape.png
+│   ├── analysis/
+|   │   ├── meta_table.csv
+|   │   ├── slide4_ensemble_and_warmstart.png
+│
+├── run_all_datasets.py
+|
+├── requirements.txt
+|
+└── automl_orchestrator.py
+```
 
-### Preprocessing Pipeline
-- Implemented `build_preprocessor(schema)` in `preprocessing/build_preprocessor.py`:
-  - Handles **imputation** (median for numeric, most frequent for categorical).
-  - Applies **scaling** (StandardScaler) and **encoding** (OneHotEncoder).
-  - Designed for easy integration into the AutoML pipeline via scikit-learn’s `ColumnTransformer`.
+### **3. Running AutoML:**
+Run the full AutoML pipeline across all datasets (currently set to Bayesian Optimization):
 
-### Validation
-- Created `validate_preprocessing.py` to verify:
-  - End-to-end compatibility of preprocessing with scikit-learn models.
-  - Successful runs on Iris and Wine Quality datasets.
-  - Output: printed accuracy for Iris classification, RMSE for Wine regression.
+```bash
+python automl_orchestrator.py --all
+```
+This will run:
 
-**Result:** Preprocessing modules are fully functional and validated on small datasets.  
-This completes the Week 2 milestone defined in the project timeline.
+- Adult Income
 
----
+- Iris
 
-## Week 3: Progress Summary — Model Wrapper Implementation
+- Wine Quality
 
-### Model Architecture
-- Created a standardized **BaseModel** interface in `models/base_model.py` with unified methods:
-  - `.train(X, y)` — fits the model  
-  - `.predict(X)` — generates predictions  
-  - `.score(X, y)` — computes task-specific metrics (**accuracy/F1** for classification, **RMSE** for regression)
-- Ensures all models integrate seamlessly into future AutoML search pipelines.
+and produce:
 
-### Linear Models
-- Implemented in `models/linear_models.py`:
-  - **Logistic Regression:** baseline classifier with interpretable decision boundaries  
-  - **Ridge Regression:** regression benchmark for numeric prediction tasks  
-- Serves as the baseline family for comparison against tree-based and neural models.
+- Leaderboards
 
-### Tree-Based Models
-- Implemented in `models/tree_models.py`:
-  - **Decision Tree:** interpretable single-tree model for fast experimentation  
-  - **Random Forest:** ensemble method providing stability and reduced variance  
-  - **Gradient Boosting:** boosting-based ensemble achieving highest baseline accuracy on validation data  
-- All tree models share the same interface and integrate with the preprocessing pipeline.
+- Search histories
 
-### Neural Network
-- Implemented in `models/neural_net.py`:
-  - Simple **feed-forward MLP** supporting both classification and regression  
-  - Architecture: two hidden layers (64, 32 neurons) with ReLU activations and a maximum of 500 iterations  
-  - Provides a foundation for future deep-learning extensions (NAS, meta-learning)
+- Updated meta-learning database
 
-### Validation
-- Created `models/validate_models.py` to verify end-to-end compatibility of all wrappers with preprocessing modules  
-- Validated on the **Iris** dataset using the unified preprocessing + model pipeline  
-
-**Output Scores**
-| Model | Accuracy |
-|:--------------------|:-----------:|
-| Logistic Regression | 0.857 |
-| Decision Tree | 0.822 |
-| Random Forest | 0.859 |
-| Gradient Boosting | 0.874 |
-| Neural Network | 0.840 |
-
-**Result:** All model wrappers train and evaluate successfully through the preprocessing pipeline.  
-A complete **Model Zoo** has been established, forming the backbone for Week 4’s hyperparameter search and AutoML pipeline integration.
+- Best model checkpoint per dataset
 
 
-## Week 4: Progress Summary — Baseline Search Strategies & Pipeline Integration
+Or run a single dataset:
+```bash
+python automl_orchestrator.py --data data/iris.csv --target class
+```
 
-### Search Framework
-- Developed a unified **SearchManager** in `search/grid_random.py` supporting both **Grid Search** and **Random Search**.  
-- Enables hyperparameter optimization for any scikit-learn-compatible model within a preprocessing → model pipeline.  
-- Accepts customizable arguments such as `scoring`, `cv`, `n_iter`, and `random_state` for flexible experimentation.
+Outputs include:
+- Leaderboard CSVs
 
-### Parameter Grids
-- Defined task-specific parameter grids in `search/search_utils.py` for all supported models:  
-  - **Logistic Regression:** solver + regularization strength  
-  - **Ridge Regression:** alpha (regularization)  
-  - **Decision Tree:** depth + split thresholds  
-  - **Random Forest:** estimators + depth  
-  - **Gradient Boosting:** learning rate + depth + estimators  
-  - **Neural Network:** layer size + learning rate  
-- Allows systematic exploration of each model’s hyperparameter space.
+- Model checkpoints
 
-### AutoML Orchestrator
-- Implemented the end-to-end **`automl_orchestrator.py`** module integrating:
-  - Automatic dataset loading and preprocessing  
-  - Model selection from the Model Zoo  
-  - Hyperparameter search via Grid/Random Search  
-  - Cross-validation evaluation and test-set scoring  
-  - Leaderboard generation and ranking of tuned models  
-- Added **automatic task-type detection** (`classification` vs `regression`) and skipping of incompatible models, enabling dataset-agnostic operation.
+- Search histories
 
-### Validation
-- Executed the full AutoML pipeline on the **Iris** dataset (classification).  
-- Confirmed correct task detection and model skipping (`Ridge` excluded automatically).  
-- Each model completed cross-validated hyperparameter search and test-set evaluation.
+- Meta-learning database updates
 
-**Output Leaderboard**
-| Model | Best CV Score | Test Score | Key Parameters |
-|:--------------------|:------------:|:------------:|:----------------|
-| Gradient Boosting | 0.8716 | 0.8768 | `n_estimators=100`, `max_depth=4`, `learning_rate=0.2` |
-| Decision Tree | 0.8553 | 0.8601 | `max_depth=10`, `min_samples_split=2` |
-| Random Forest | 0.8564 | 0.8590 | `n_estimators=100`, `max_depth=10` |
-| Logistic Regression | 0.8516 | 0.8520 | `C=1`, `solver='liblinear'` |
-| Neural Net | 0.8449 | 0.8513 | `hidden_layer_sizes=(32,)`, `learning_rate_init=0.001` |
 
-**Result:** The AutoML framework now performs full-cycle automation—data preprocessing, model training, and hyperparameter tuning—with leaderboard evaluation.  
-This milestone completes **Week 4**, establishing a robust baseline AutoML system ready for Week 5’s enhancements in logging, efficiency analysis, and cross-dataset evaluation.
+### **4. Example Notebook:**
+An included notebook:
+```bash
+notebooks/example_run.ipynb
+```
+demonstrates:
+- Loading the datasets
 
+- Running the AutoML system
+
+- Plotting leaderboard comparisons
+
+- Visualizing search trajectories
+
+- Inspecting TinyNAS architectures
+
+### **5. Model Checkpoints:**
+Best models for each dataset are saved automatically to:
+```bash
+checkpoints/
+    best_model_<dataset>.pkl
+```
+
+You can load a model with:
+```python
+import joblib
+model = joblib.load("checkpoints/best_model_adult.pkl")
+model.predict(X)
+```
+
+### **6. Academic Integrity Disclosure:**
+This project used ChatGPT (OpenAI, 2025 version) for assistance in drafting documentation, refining explanations, and debugging certain components. All implementation, experiments, and analysis were performed by the author.
+
+OpenAI. (2025). ChatGPT (Dec 2025 Model): Conversation-based assistance with analysis, editing, and explanation. 
+Retrieved from https://chat.openai.com/
+
+
+### **7. Future Work:**
+Full list available in the final report. Key next steps:
+
+- Expand metric suite (F1, AUC, RMSE, MAE)
+
+- Improve regression support and detection
+
+- Broaden model zoo (XGBoost, CatBoost, LightGBM)
+
+- Explore deeper NAS and meta-learning

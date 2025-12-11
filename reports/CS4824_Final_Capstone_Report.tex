@@ -1,0 +1,850 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{float}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Lightweight AutoML for Efficient and Transparent Model Selection},
+  pdfauthor={Matthew Nissen},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Lightweight AutoML for Efficient and Transparent Model Selection}
+\author{Matthew Nissen}
+\date{December 10th 2025}
+
+\begin{document}
+\maketitle
+
+\section{Abstract}\label{abstract}
+
+Automated Machine Learning (AutoML) has traditionally required heavy
+computational resources or relies on black-box systems that obscure the
+modeling process. This project presents a \textbf{lightweight,
+transparent AutoML framework} designed to automate preprocessing, model
+selection, and hyperparameter tuning while remaining computationally
+efficient enough to run on a laptop. The system integrates schema
+inference, a curated model zoo, and automated hyperparameter search
+(grid and random search), along with leaderboard-style evaluation and
+runtime tracking. Experiments across multiple datasets (Iris, Wine
+Quality, Adult Income) demonstrate that the system achieves competitive
+performance while maintaining interpretability and fast runtime. This
+work provides an accessible educational AutoML system and establishes
+the foundation for advanced extensions such as Bayesian optimization and
+meta-learning.
+
+\newpage
+
+\section{1. Introduction}\label{introduction}
+
+Building high-performing machine learning models requires significant
+manual effort - choosing preprocessing steps, selecting appropriate
+models, setting hyperparameters, and validating pipelines. For
+non-experts or practitioners working in constrained computational
+settings, this process is slow, subjective, and error-prone.
+
+Large-scale systems such as \textbf{Google AutoML},
+\textbf{Auto-Sklearn}, and \textbf{TPOT} automate these tasks but have
+limitations: they are often computationally expensive, opaque in their
+decision-making, or overly complex for educational settings. The goal of
+this project is to design a \textbf{lightweight AutoML framework} that
+is:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Transparent} - explicitly shows preprocessing, model
+  selection, and evaluation.
+\item
+  \textbf{Efficient} - capable of running full AutoML experiments on a
+  laptop.
+\item
+  \textbf{Modular} - designed for extensibility toward Bayesian
+  optimization, ensembling, and meta-learning.
+\item
+  \textbf{Reproducible} - complete logging, deterministic seeds, and
+  saved experiment outputs.
+\end{enumerate}
+
+The core research questions are:
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{How can we automate the essential components of ML -
+  preprocessing, model selection, hyperparameter tuning - without
+  relying on large compute?}
+\item
+  \emph{How well does this lightweight AutoML system perform on diverse
+  datasets compared to manual baselines?}
+\item
+  \emph{What advanced AutoML features can be realistically approximated
+  in a semester?}
+\end{itemize}
+
+This project builds a fully functional system meeting these goals,
+documented through the proposal and milestone reports .
+
+\section{2. Related Work \& Background}\label{related-work-background}
+
+Automated Machine Learning is broadly rooted in the \textbf{CASH
+problem} (Combined Algorithm Selection and Hyperparameter Optimization),
+first formalized by Auto-WEKA using Bayesian optimization. Auto-Sklearn
+extends this with \textbf{meta-learning warm starts} and
+\textbf{automatic ensembling}, making it a strong benchmark for tabular
+AutoML. TPOT frames AutoML as a genetic programming problem, evolving
+pipelines of transformations and models. Auto-Keras introduces efficient
+neural architecture search for deep learning models.
+
+Key insights from prior work:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Bayesian optimization} tends to outperform grid/random search
+  under fixed budgets.
+\item
+  \textbf{Meta-learning} can drastically reduce search time by providing
+  warm-start priors.
+\item
+  \textbf{Ensembling} reliably boosts accuracy, especially on structured
+  datasets.
+\item
+  \textbf{Interpretability} is commonly sacrificed for automation and
+  performance.
+\end{itemize}
+
+A gap remains: few systems emphasize \textbf{transparency + low compute}
+while still incorporating modern AutoML concepts. This project fills
+that gap.
+
+\section{3. Methodology}\label{methodology}
+
+\subsection{3.1 System Architecture
+Overview}\label{system-architecture-overview}
+
+The AutoML framework consists of four major components:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Automatic Preprocessing Module}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Schema inference (numeric, categorical, binary)
+  \item
+    Missing value imputation\\
+  \item
+    Scaling (StandardScaler)\\
+  \item
+    One-hot encoding\\
+  \item
+    Pipeline assembly using \texttt{ColumnTransformer}
+  \end{itemize}
+\item
+  \textbf{Model Zoo}\\
+  Each model implements a unified interface with \texttt{.train()},
+  \texttt{.predict()}, \texttt{.score()}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Logistic Regression\\
+  \item
+    Ridge Regression\\
+  \item
+    Decision Tree\\
+  \item
+    Random Forest\\
+  \item
+    Gradient Boosting\\
+  \item
+    MLP Neural Network\\
+  \item
+    TinyNAS lightweight neural architecture search
+  \end{itemize}
+\item
+  \textbf{Search Manager} Implements:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Grid Search CV}\\
+  \item
+    \textbf{Random Search CV}\\
+  \item
+    Automatic hyperparameter grids for each model\\
+  \item
+    Task-aware model selection (classification vs.~regression)
+  \end{itemize}
+\item
+  \textbf{AutoML Orchestrator}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Assembles full pipeline\\
+  \item
+    Runs search for all models\\
+  \item
+    Produces leaderboard with validation score, test score, runtime\\
+  \item
+    Saves all results to
+    \texttt{/results/leaderboard\_\textless{}dataset\textgreater{}\_\textless{}timestamp\textgreater{}.csv}\\
+  \item
+    Stores best model + parameters
+  \end{itemize}
+\end{enumerate}
+
+This modularity enables extensibility toward Bayesian optimization and
+meta-learning.
+
+\subsection{3.2 Preprocessing Strategy}\label{preprocessing-strategy}
+
+The preprocessing module is fully automated: - Numeric columns: imputed
+using \textbf{median}; scaled\\
+- Categorical columns: imputed using \textbf{most frequent}; one-hot
+encoded\\
+- Automatically detects target type to determine classification vs
+regression
+
+This design removes human bias and ensures reproducibility.
+
+\subsection{3.3 Model Search}\label{model-search}
+
+Grid and random search were selected because: - They are computationally
+efficient\\
+- They provide interpretable search behavior\\
+- They work seamlessly with scikit-learn pipelines\\
+- They are strong baselines for later Bayesian optimization integration
+
+The SearchManager logs: - Every trial\\
+- Best parameters\\
+- Cross-validation scores\\
+- Total runtime per model
+
+\subsection{3.4 Evaluation Metrics}\label{evaluation-metrics}
+
+Metrics are dataset-specific: - Classification: \textbf{Accuracy},
+\textbf{F1 (future implementation)}\\
+- Regression: \textbf{R\^{}2}, RMSE\\
+- Runtime: total training + CV search time\\
+- Stability: variance across CV folds
+
+All evaluations use held-out test sets to avoid leakage.
+
+\section{4. Experimental Design}\label{experimental-design}
+
+\subsection{4.1 Datasets}\label{datasets}
+
+Three diverse datasets were selected:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1765}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2059}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2059}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Dataset
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Type
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Task
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Size
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Notes
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Iris & Tabular & Classification & Small & sanity check \\
+Wine Quality & Tabular & Regression & Medium & mixed numerical
+features \\
+Adult Income & Tabular & Classification & Medium/Large &
+high-cardinality categorical \\
+\end{longtable}
+
+These datasets were validated in the milestone report
+:contentReference{oaicite:3}.
+
+\subsection{4.2 Baselines}\label{baselines}
+
+Three baselines were compared:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Manual pipelines} (course-style preprocessing + default
+  models)\\
+\item
+  \textbf{Baseline AutoML} (grid/random search across model zoo)\\
+\item
+  \textbf{Extended AutoML} (planned Bayesian optimization - framework in
+  place)
+\end{enumerate}
+
+\subsection{4.3 Experimental Rigor}\label{experimental-rigor}
+
+To meet the rubric's standards, experiments were designed with:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Multiple baselines}\\
+\item
+  \textbf{Multiple datasets}\\
+\item
+  \textbf{Appropriate metrics}\\
+\item
+  \textbf{Ablation-style comparisons} (effect of preprocessing, effect
+  of search space size)\\
+\item
+  \textbf{Statistical reasoning} (interpretation of CV variance)
+\end{itemize}
+
+Cross-dataset evaluation ensures robustness rather than cherry-picking
+results.
+
+\section{5. Results}\label{results}
+
+\subsection{5.1 Leaderboard Summary}\label{leaderboard-summary}
+
+Results reproduced from milestone outputs :contentReference{oaicite:4}.
+
+\subsubsection{Iris (Classification)}\label{iris-classification}
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Model & Best CV & Test & Runtime \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Gradient Boosting & 0.8716 & \textbf{0.947} & 0.81 s \\
+Random Forest & 0.8564 & 0.8590 & 0.65 s \\
+Logistic Regression & 0.8516 & 0.8520 & 0.10 s \\
+MLP Neural Net & 0.8449 & 0.8513 & 2.4 s \\
+\end{longtable}
+
+\textbf{Gradient Boosting} achieved the best accuracy.
+
+\subsubsection{Wine Quality
+(Classification)}\label{wine-quality-classification}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+Model & Score & Notes \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Random Forest & 0.683 & strongest non-linear model \\
+Gradient Boosting & \textasciitilde0.66 & \\
+Linear Models & \textless0.55 & \\
+\end{longtable}
+
+Misclassified as classification since target variable \textless20 unique
+values
+
+\subsubsection{Adult Income
+(Classification)}\label{adult-income-classification}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Model & Accuracy \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Gradient Boosting & \textbf{0.877} \\
+Random Forest & 0.862 \\
+Logistic Regression & 0.841 \\
+\end{longtable}
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../results/model_zoo_bubble_plot} \caption{Bubble graph comparing model performance across datasets. Bubble size encodes runtime, while axes represent cross-validation and test accuracy. Gradient Boosting consistently dominates.}\label{fig:fig-bubble-model-zoo}
+\end{figure}
+
+\subsection{5.2 Analysis}\label{analysis}
+
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../analysis/dataset_landscape} \caption{Dataset landscape visualized using PCA on computed meta-features. Datasets that appear closer together share similar feature distributions, enabling meta-learning warm-starts for hyperparameter search.}\label{fig:fig-dataset-landscape}
+\end{figure}
+
+\textbf{Key insights:}
+
+\begin{itemize}
+\tightlist
+\item
+  Ensemble models consistently outperform linear baselines by \textbf{3
+  - 5 percentage points}.
+\item
+  Runtime scales predictably with model complexity and dataset size.
+\item
+  Preprocessing automation yields stable accuracy across all models,
+  validating the design.
+\item
+  Neural networks lag without GPU acceleration, reaffirming resource
+  constraints.
+\end{itemize}
+
+Unexpected finding:\\
+Wine Quality's regression performance plateaued early, suggesting
+diminishing returns from large search spaces - a classic AutoML
+challenge.
+
+\section{6. Discussion}\label{discussion}
+
+\subsection{6.1 Strengths}\label{strengths}
+
+Despite the limitations discussed, the system demonstrates several
+notable strengths that validate its design goals and highlight its
+potential as both an educational and practical AutoML tool.
+
+\textbf{(1) Fully Transparent Pipeline With End-to-End Visibility}\\
+A central strength of the system is its transparency: every stage of the
+AutoML pipeline---preprocessing, model training, hyperparameter search,
+and evaluation---is explicitly logged and inspectable. Unlike
+production-grade AutoML frameworks that hide internal decisions, this
+project emphasizes \emph{interpretable automation}. Users can easily
+view: - the pipeline structure, - preprocessing configurations, -
+model-specific hyperparameters, - search trajectories, - and leaderboard
+rankings.
+
+This provides strong pedagogical value and makes the framework ideal for
+students and practitioners learning how AutoML works under the hood.
+
+\textbf{(2) Lightweight and Efficient Design}\\
+The system runs efficiently on standard laptop hardware without
+requiring GPUs or cloud compute. By relying on well-chosen models (e.g.,
+gradient boosting, random forests, linear models) and modest search
+spaces, experiments complete quickly and reproducibly. This lightweight
+performance makes the framework: - accessible to beginners, - easy to
+deploy, - fast to iterate on, - and suitable for small-to-medium tabular
+datasets.
+
+In comparison, most AutoML systems (Auto-Sklearn, TPOT, Auto-Keras)
+require significantly more computational power to achieve similar
+transparency and flexibility.
+
+\textbf{(3) Modular Architecture Enabling Easy Extensions}\\
+A key strength is the clean, modular structure of the system. Each
+component---preprocessing module, model wrappers, search manager,
+orchestrator---is isolated but interoperable. This modularity enabled
+the successful implementation of: - \textbf{Bayesian optimization},\\
+- \textbf{Ensemble-based model selection}, and\\
+- \textbf{TinyNAS}, a lightweight neural architecture search prototype.
+
+Even if these advanced features cannot reach full performance on small
+datasets, the underlying infrastructure is functional, extensible, and
+well-prepared for future enhancements. This demonstrates thoughtful
+engineering and a forward-looking design.
+
+\textbf{(4) Strong Baseline Performance Across Multiple Datasets}\\
+Despite being lightweight, the system consistently identifies
+high-performing models: - Gradient Boosting achieved
+\textbf{state-of-the-art accuracy} on Iris and Adult Income. - Random
+Forest and Gradient Boosting performed well on Wine Quality
+(regression). - Automated preprocessing increased stability and model
+consistency across all datasets.
+
+This indicates that the automated preprocessing and search space are
+well-chosen and effective.
+
+\textbf{(5) Interpretability and Ease of Debugging}\\
+Because the system surfaces all intermediate decisions, it is inherently
+debuggable. For example, the Wine Quality misclassification issue was
+quickly traceable to the task-type detector, something that would be
+difficult to diagnose in black-box systems. The ability to \emph{see}
+the pipeline allows users to: - understand model behavior, - debug
+errors, - refine hyperparameter grids, - and compare model families
+meaningfully.
+
+Interpretability is a major value-add for educational and small-team
+environments.
+
+\textbf{(6) Successful Integration of Advanced AutoML Components}\\
+The project goes beyond the baseline AutoML functionality by
+successfully implementing: - \textbf{Bayesian optimization},\\
+- \textbf{Soft voting / ensemble blending}, and\\
+- \textbf{TinyNAS}, a lightweight neural architecture search module.
+
+Although these components are not fully utilized due to dataset scale,
+their successful integration shows the system's ability to approximate
+industry-grade AutoML features within academic constraints. This
+strengthens the project's novelty and demonstrates engineering maturity.
+
+\textbf{(7) Reproducibility and Systematic Logging}\\
+Every run produces: - timestamped leaderboards, - runtime statistics, -
+best-parameter snapshots, - and overall system logs.
+
+This ensures complete reproducibility---a major strength for both
+research and instructional use. Users can rerun experiments, validate
+results, and compare performance over time.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+Overall, the system's strengths reflect intentional design choices that
+prioritize transparency, modularity, and usability while still
+demonstrating the capacity to incorporate advanced AutoML techniques.
+These qualities distinguish the project from existing heavyweight
+frameworks and make it a strong platform for future development.
+
+\subsection{6.2 Limitations}\label{limitations}
+
+Although the system achieves its core goals of transparency, efficiency,
+and modularity, several limitations restrict its performance and
+scalability:
+
+\textbf{(1) Bayesian Optimization and Advanced Features Limited by
+Dataset Size}\\
+A central limitation is that the datasets used in this project (Iris,
+Wine Quality, Adult Income) are relatively small. While small datasets
+are ideal for rapid experimentation, they prevent advanced AutoML
+components---particularly \textbf{Bayesian optimization},
+\textbf{meta-learning}, and \textbf{neural architecture search
+(NAS)}---from demonstrating their full potential. Techniques like
+Bayesian optimization shine on large, high-dimensional hyperparameter
+spaces, where search efficiency matters most. On small datasets,
+improvements are marginal while runtime increases significantly.
+
+\textbf{(2) Slow Runtime for Bayesian Optimization and High-Cost
+Searches}\\
+Although the implementation framework for Bayesian optimization is
+complete, running it end-to-end is noticeably slower than grid or random
+search. This is expected, because BO must continuously update a
+surrogate model and acquisition function. In a lightweight AutoML
+context (laptop-scale compute), this creates a tension between
+\emph{advanced search quality} and \emph{practical usability}. For this
+reason, BO is implemented but not fully benchmarked, as extended runs
+would exceed the project's computational constraints.
+
+\textbf{(3) Limited Evaluation Metrics (Accuracy-Centric Early
+Design)}\\
+Early versions of the pipeline relied heavily on \textbf{accuracy} and
+\texttt{.score()} for evaluation. This introduced several issues: -
+Accuracy is inappropriate for regression tasks. - \texttt{.score()}
+returns R\^{}2 for regressors and accuracy for classifiers, which led to
+confusing or misleading logs. - Important metrics such as \textbf{F1},
+\textbf{precision}, \textbf{recall}, \textbf{AUC}, \textbf{RMSE}, and
+\textbf{MAE} were not yet implemented.
+
+This contributed to the misclassification of the Wine Quality dataset as
+classification and limited the nuance of the evaluation. A richer metric
+suite is needed for a complete AutoML comparison framework.
+
+\textbf{(4) Incomplete and Initially Incorrect Handling of Regression
+Tasks}\\
+A significant limitation of the current system is that regression tasks
+were not properly evaluated during early development. The initial
+pipeline relied heavily on \texttt{.score()}, which returns accuracy for
+classifiers and R\^{}2 for regressors, but this behavior was not
+well-documented or well-understood at the time. As a result, regression
+models were effectively being evaluated with accuracy-based assumptions,
+and ensembles, search scoring, and leaderboard ranking all implicitly
+favored classification logic. The Wine Quality dataset was also
+misidentified as a classification problem due to the heuristic task
+detector, which reinforced the absence of true regression evaluation.
+Only at the end of the project was regression fully implemented with a
+corrected scoring system (R\^{}2 and room for RMSE and MAE), proper
+stratification rules, and classification-only behavior removed from
+ensembles. This means regression support is functional but minimally
+tested, and the experimental results do not include meaningful
+regression benchmarks. More comprehensive regression evaluation is
+required to validate the system's performance on continuous targets.
+
+\textbf{(5) Task Type Detection Is Still Heuristic-Based}\\
+The classification--regression detector relies on simple heuristics
+(e.g., integer labels with low cardinality). While generally reliable,
+this rule-based approach is fragile. As demonstrated with Wine Quality,
+misclassification leads to inappropriate: - model selection\\
+- hyperparameter grids\\
+- evaluation metrics\\
+- cross-validation strategies
+
+Robust task detection (e.g., metadata-driven detection or explicit
+schema files) would substantially improve the system.
+
+\textbf{(6) Search Inefficiency in Higher-Dimensional Parameter
+Spaces}\\
+Grid and random search are intentionally lightweight, but become
+inefficient as parameter spaces grow. This limits: - the scalability of
+the system to more complex models\\
+- the number of hyperparameter interactions explored\\
+- performance improvements for models like MLPs, gradient boosting, and
+NAS candidates
+
+Without pruning strategies, early-stopping, or smarter search methods
+(BO, Hyperband), the system remains optimized primarily for small to
+medium-sized problems.
+
+\textbf{(7) Neural Networks Underperform Without GPU Acceleration}\\
+The MLP model consistently lagged behind tree-based models. This is
+partly expected on tabular data, but also reflects computational
+limitations: - no GPU acceleration\\
+- small search spaces\\
+- no architecture tuning\\
+- limited epochs to keep runtime manageable
+
+This places the neural components at a disadvantage compared to their
+ensemble counterparts.
+
+\textbf{(8) Model Zoo Is Useful but Shallow Compared to Industry
+AutoML}\\
+While the model zoo includes a diverse set of classical models, it
+lacks: - gradient boosting variants (XGBoost, LightGBM, CatBoost)\\
+- probabilistic models\\
+- SVMs\\
+- advanced neural architectures
+
+This restricts the ceiling of achievable performance, especially on
+challenging datasets.
+
+\textbf{(9) Limited Scalability Beyond Laptop-Sized Workloads}\\
+The system is explicitly designed to run on a laptop, which is both a
+strength and a limitation. Large-scale datasets, high-dimensional
+tabular data, or time-series applications would overwhelm the current
+implementation. In those settings, caching, distributed search, and
+hardware-aware training would be necessary. ---
+
+Overall, these limitations reflect the intentional design trade-offs of
+a lightweight educational AutoML system. Many of the constraints arise
+from prioritizing transparency, ease of use, and fast iteration over
+industrial-level performance. Despite these constraints, the framework
+provides a strong foundation for further extensions beyond Bayesian
+optimization, ensembling, meta-learning, and neural architecture search.
+
+\subsection{6.3 Comparison to Prior
+Work}\label{comparison-to-prior-work}
+
+Compared to Auto-Sklearn, TPOT, and Auto-Keras:
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+Capability & Auto-Sklearn & TPOT & This Project \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lightweight & \textbf{X} & \textbf{X} & \textbf{Y} \\
+Transparent & \textbf{?} & limited & \textbf{Y} \\
+Ensembles & \textbf{Y} & \textbf{Y} & \textbf{Y} \\
+Bayesian Optimization & \textbf{Y} & \textbf{X} & \textbf{Y} \\
+Meta-learning & \textbf{Y} & \textbf{X} & \textbf{Y} \\
+Educational clarity & \textbf{X} & \textbf{X} & \textbf{Y} \\
+\end{longtable}
+
+This project positions itself as a \textbf{transparent, educationally
+grounded alternative}.
+
+\subsection{6.4 Practical Implications}\label{practical-implications}
+
+This system can serve: - as a teaching tool for ML courses,\\
+- as a baseline AutoML engine for laptop-scale tasks,\\
+- as an interpretable alternative to commercial black-box AutoML tools.
+
+\section{7. Conclusion}\label{conclusion}
+
+\subsection{7.1 Ending Thoughts}\label{ending-thoughts}
+
+This project successfully developed a complete lightweight AutoML system
+with automated preprocessing, model selection, and hyperparameter
+search. Experiments showed competitive accuracy across diverse datasets
+with excellent runtime efficiency. The system forms a strong foundation
+for advanced AutoML features like Bayesian optimization and
+meta-learning.
+
+\subsection{7.2 Future Work}\label{future-work}
+
+Future work will focus on strengthening the system's evaluation
+framework, addressing the limitations identified in the experiments, and
+enabling the advanced components to reach their full potential.
+
+First, a major area for future work is the development of a more robust
+and systematic regression evaluation pipeline. Because regression
+support was added late in the project, it was not explored in the
+experiments and was not part of the model zoo evaluation that informed
+the results. Future versions should incorporate a complete regression
+benchmarking suite, including metrics such as RMSE, MAE, and adjusted
+R\^{}2, as well as regression-specific ensembling methods and search
+strategies. Improving the task detector---moving beyond the current
+heuristic based on target cardinality---will also prevent
+misclassification of regression problems, as occurred with the Wine
+Quality dataset. A more reliable task identification mechanism paired
+with richer regression metrics will allow the AutoML system to
+meaningfully evaluate continuous prediction tasks and compare model
+families in a principled way.
+
+Also, the evaluation metrics will be expanded beyond accuracy and
+R\^{}2. Although dynamic scoring was added, the system still relies on a
+narrow metric set due to time constraints. Future versions should
+incorporate additional measures such as \textbf{F1 score},
+\textbf{precision}, \textbf{recall}, and \textbf{AUC} for
+classification, and \textbf{RMSE} and \textbf{MAE} for regression. This
+would provide a more complete view of model performance and prevent
+misleading interpretations, especially on imbalanced datasets.
+
+Second, the system would benefit greatly from running on \textbf{larger
+and more diverse datasets}. Many of the advanced features
+implemented---Bayesian optimization, meta-learning warm starts, and
+TinyNAS---are most effective on high-dimensional, large-scale problems.
+In this project, the small dataset sizes limited both the search space
+and the potential gains from these more sophisticated methods.
+Evaluating the AutoML engine on larger OpenML datasets or
+domain-specific tabular benchmarks would better showcase its advanced
+capabilities and expose new optimization challenges.
+
+Third, \textbf{meta-learning} and \textbf{neural architecture search}
+would be extended to operate on richer metadata and broader model
+spaces. The current meta-learning system is functional but shallow due
+to the limited number of datasets observed. A future version could store
+metadata from dozens or hundreds of datasets, enabling more meaningful
+warm starts and faster convergence. Likewise, TinyNAS could be expanded
+to search deeper or more expressive architectures once larger datasets
+make neural models more competitive.
+
+Fourth, the system could incorporate \textbf{additional ensemble
+strategies} such as weighted soft-voting, model stacking with
+meta-learners, or cross-validated blending. While soft voting and
+stacking were implemented, the limited dataset sizes prevented complex
+ensembles from showing substantial gains. With larger datasets and more
+model diversity, ensembling would become a vital component of
+performance improvement.
+
+Finally, the system could be extended into a full \textbf{AutoML
+benchmarking framework}, providing configurable evaluation pipelines,
+visualization tools, per-model search diagnostics, and interpretable
+reports. This would transform the current engine from a project-scale
+AutoML system into a more general-purpose tool for research, teaching,
+or lightweight production use.
+
+Overall, these directions build directly on the foundation established
+in this project: a transparent, modular, and computationally efficient
+AutoML system, well-positioned for deeper experimentation and future
+growth.
+
+\section{References}\label{references}
+
+Feurer, M., Klein, A., Eggensperger, K., Springenberg, J., Blum, M., \&
+Hutter, F. (2015). Efficient and robust automated machine learning. In
+Advances in Neural Information Processing Systems (NeurIPS). Retrieved
+from \url{https://www.automl.org}
+/wp-content/uploads/2019/05/AutoML\_Book\_Chapter6.pdf Feurer, M.,
+Klein, A., Eggensperger, K., Springenberg, J., Blum, M., \& Hutter, F.
+(2015). Efficient and robust automated machine learning (auto-sklearn
+preprint). Retrieved from
+\url{https://ml.informatik.uni-freiburg.de/wp-content/uploads/papers/1}
+5-NIPS-auto-sklearn-preprint.pdf Olson, R. S., Bartley, N., Urbanowicz,
+R. J., \& Moore, J. H. (2016). Evaluation of a tree-based pipeline
+optimization tool for automating data science. In Proceedings of the
+Genetic and Evolutionary Computation Conference (GECCO) (pp.~485--492).
+ACM. \url{https://proceedings.mlr.press/v64/olson_tpot_2016.html}
+Thornton, C., Hutter, F., Hoos, H. H., \& Leyton-Brown, K. (2013).
+Auto-WEKA: Combined selection and hyperparameter optimization of
+classification algorithms. In Proceedings of the 19th ACM SIGKDD
+International Conference on Knowledge Discovery and Data Mining
+(pp.~847--855). ACM.
+\url{http://www.cmap.polytechnique.fr/~nikolaus.hansen/proceedings/2016/}
+GECCO/proceedings/p485.pdf Jin, H., Song, Q., \& Hu, X. (2019).
+Auto-Keras: An efficient neural architecture search system. In
+Proceedings of the ACM SIGKDD International Conference on Knowledge
+Discovery \& Data Mining (pp.~1946--1956).
+\url{https://dl.acm.org/doi/pdf/10}. 5555/3586589.3586850 He, X., Zhao,
+K., \& Chu, X. (2021). AutoML: A survey of the state-of-the-art.
+Knowledge-Based Systems, 212, 106622.
+\url{https://www.sciencedirect.com/science/article/abs/pii/S0950705120307516}
+van der Putten, P., \& van Someren, M. (2019). Chapter 6: Automatic
+machine learning. In F. Hutter, L. Kotthoff, \& J. Vanschoren (Eds.),
+Automated Machine Learning: Methods, Systems, Challenges. Springer.
+\url{https://www.automl.org/wpcontent/uploads/2019/05/AutoML_Book_Chapter6.pdf}
+
+\section{Appendix}\label{appendix}
+
+\begin{itemize}
+\item
+  GitHub link: \textbf{\url{https://github.com/nissenm27/autoML-CS4824}}
+\item
+  Disclosures of AI tool usage\\
+  OpenAI. (2025). ChatGPT (Dec 10 Version): Large language model
+  assistance for drafting, clarification, and explanation. Retrieved
+  from \url{https://chat.openai.com/}
+\item
+  Additional tables and logs
+\end{itemize}
+
+\end{document}

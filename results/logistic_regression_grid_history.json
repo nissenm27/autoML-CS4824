@@ -1,0 +1,66 @@
+[
+  {
+    "iteration": 1,
+    "score": 0.8475334053091812,
+    "params": {
+      "model__C": 0.01,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 2,
+    "score": 0.8478883190782298,
+    "params": {
+      "model__C": 0.01,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 3,
+    "score": 0.8508912080609731,
+    "params": {
+      "model__C": 0.1,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 4,
+    "score": 0.8510004126415559,
+    "params": {
+      "model__C": 0.1,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 5,
+    "score": 0.851109612750756,
+    "params": {
+      "model__C": 1,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 6,
+    "score": 0.8515736998007082,
+    "params": {
+      "model__C": 1,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 7,
+    "score": 0.8511642060982819,
+    "params": {
+      "model__C": 10,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 8,
+    "score": 0.8511642083339733,
+    "params": {
+      "model__C": 10,
+      "model__solver": "liblinear"
+    }
+  }
+]

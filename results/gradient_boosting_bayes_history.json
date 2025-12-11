@@ -1,0 +1,110 @@
+[
+  {
+    "iteration": 1,
+    "value": 0.602216748768473,
+    "params": {
+      "model__n_estimators": 190,
+      "model__learning_rate": 0.004533181711673975,
+      "model__max_depth": 10
+    }
+  },
+  {
+    "iteration": 2,
+    "value": 0.624384236453202,
+    "params": {
+      "model__n_estimators": 249,
+      "model__learning_rate": 0.11118380703090164,
+      "model__max_depth": 8
+    }
+  },
+  {
+    "iteration": 3,
+    "value": 0.5726600985221675,
+    "params": {
+      "model__n_estimators": 206,
+      "model__learning_rate": 0.002828326895465562,
+      "model__max_depth": 7
+    }
+  },
+  {
+    "iteration": 4,
+    "value": 0.5888752052545155,
+    "params": {
+      "model__n_estimators": 54,
+      "model__learning_rate": 0.010180342807352223,
+      "model__max_depth": 9
+    }
+  },
+  {
+    "iteration": 5,
+    "value": 0.6007799671592775,
+    "params": {
+      "model__n_estimators": 80,
+      "model__learning_rate": 0.2534187170629954,
+      "model__max_depth": 4
+    }
+  },
+  {
+    "iteration": 6,
+    "value": 0.5529556650246307,
+    "params": {
+      "model__n_estimators": 261,
+      "model__learning_rate": 0.002138954366443026,
+      "model__max_depth": 6
+    }
+  },
+  {
+    "iteration": 7,
+    "value": 0.5851806239737274,
+    "params": {
+      "model__n_estimators": 91,
+      "model__learning_rate": 0.0060276677797835845,
+      "model__max_depth": 8
+    }
+  },
+  {
+    "iteration": 8,
+    "value": 0.6149425287356322,
+    "params": {
+      "model__n_estimators": 219,
+      "model__learning_rate": 0.4233228195416923,
+      "model__max_depth": 6
+    }
+  },
+  {
+    "iteration": 9,
+    "value": 0.6153530377668308,
+    "params": {
+      "model__n_estimators": 71,
+      "model__learning_rate": 0.02065999369947265,
+      "model__max_depth": 10
+    }
+  },
+  {
+    "iteration": 10,
+    "value": 0.6182266009852216,
+    "params": {
+      "model__n_estimators": 192,
+      "model__learning_rate": 0.011320005086506959,
+      "model__max_depth": 8
+    }
+  },
+  {
+    "iteration": 11,
+    "value": 0.5775862068965517,
+    "params": {
+      "model__n_estimators": 300,
+      "model__learning_rate": 0.08772509120251148,
+      "model__max_depth": 2
+    }
+  },
+  {
+    "iteration": 12,
+    "value": 0.6262315270935961,
+    "params": {
+      "model__n_estimators": 140,
+      "model__learning_rate": 0.05699437546014303,
+      "model__max_depth": 8
+    }
+  }
+]

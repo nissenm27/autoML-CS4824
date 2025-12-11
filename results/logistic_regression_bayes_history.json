@@ -1,0 +1,98 @@
+[
+  {
+    "iteration": 1,
+    "value": 0.5410509031198686,
+    "params": {
+      "model__C": 1.0666353677914382,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 2,
+    "value": 0.5416666666666666,
+    "params": {
+      "model__C": 0.14861320482123208,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 3,
+    "value": 0.5394088669950738,
+    "params": {
+      "model__C": 0.6062644492719651,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 4,
+    "value": 0.5297619047619048,
+    "params": {
+      "model__C": 0.0025465278238291046,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 5,
+    "value": 0.5355090311986864,
+    "params": {
+      "model__C": 0.004290850844945151,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 6,
+    "value": 0.5342775041050903,
+    "params": {
+      "model__C": 0.007629324700537859,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 7,
+    "value": 0.5336617405582923,
+    "params": {
+      "model__C": 0.0043255904830162804,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 8,
+    "value": 0.5420771756978654,
+    "params": {
+      "model__C": 6.978871552928104,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 9,
+    "value": 0.5420771756978654,
+    "params": {
+      "model__C": 4.583204290933111,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 10,
+    "value": 0.5383825944170771,
+    "params": {
+      "model__C": 2.244462504135644,
+      "model__solver": "liblinear"
+    }
+  },
+  {
+    "iteration": 11,
+    "value": 0.5420771756978653,
+    "params": {
+      "model__C": 0.0399242582777815,
+      "model__solver": "lbfgs"
+    }
+  },
+  {
+    "iteration": 12,
+    "value": 0.541871921182266,
+    "params": {
+      "model__C": 7.559672699256418,
+      "model__solver": "lbfgs"
+    }
+  }
+]
